@@ -21,6 +21,8 @@ namespace Tests
     {
         private HttpSelfHostServer _server;
         private WindsorContainer _container;
+        protected WebApiClient client;
+
         [SetUp]
         public void SetUp()
         {
@@ -39,6 +41,8 @@ namespace Tests
             Database.SetInitializer(new TripContextInitializerForTests());
             SetResolver();
             _server.OpenAsync().Wait();
+            client = new WebApiClient(Constants.BaseUri + "api/trips/");
+
         }
 
         private void SetResolver()

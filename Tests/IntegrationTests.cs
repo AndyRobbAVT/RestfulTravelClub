@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Model;
 using NUnit.Framework;
@@ -9,33 +7,26 @@ using NUnit.Framework;
 namespace Tests
 {
     [TestFixture]
-    public class When_:TestBase
+    public class When_requesting_an_existing_trip : TestBase
     {
         [Test]
-        public void It_should()
+        public void It_should_return_the_trip()
         {
-            var id = new Guid("CDC55BE1-4C80-49CC-9026-EEB16EAABB01");
-            var trip = new WebApiClient(Constants.BaseUri + "api/trips/").Get<Trip>(id.ToString());
-            trip.Id.ShouldEqual(id);
+            var trip = client.Get<Trip>(Constants.Existing_Trip_1);
+            trip.Id.ToString().ToLower().ShouldEqual(Constants.Existing_Trip_1);
         }
+    }
 
+    [TestFixture]
+    public class When_posting_a_new_trip : TestBase
+    {
         [Test]
-        public void It_shouldx()
-        {
-
-            var webApiClient = new WebApiClient(Constants.BaseUri + "api/trips/");
-            var result = webApiClient.Get<IEnumerable<Trip>>();
-        }
-
-        [Test]
-        public void It_shouldy()
+        public void It_should_set_the_correct_location()
         {
             Guid id = Guid.NewGuid();
-            var trip = new Trip {Id = id, Name = "New trip"};
+            var trip = new Trip { Id = id, Name = "New trip" };
             var response = new WebApiClient(Constants.BaseUri + "api/trips/").Post(trip);
             response.Headers.Location.ToString().ShouldEqual("http://localhost:8080/api/trips/" + id.ToString());
         }
-
-
     }
 }
