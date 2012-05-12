@@ -1,25 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
+using System.Web.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Tests
 {
-    public class WebApiClient
+    public class WebApiClient : IWebApiClient
     {
         protected readonly string _endpoint;
+        private HttpServer _inMemoryServer;
+        public HttpStatusCode LastStatusCode { get; set; }
 
         public WebApiClient(string endpoint)
         {
             _endpoint = endpoint;
         }
 
+        public WebApiClient AgainstInMemoryServer(HttpServer server)
+        {
+            _inMemoryServer = server;
+            return this;
+        }
+
         public T Get<T>(int top = 0, int skip = 0)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = NewHttpClient())
             {
                 var endpoint = _endpoint + "?";
                 var parameters = new List<string>();
@@ -33,7 +42,8 @@ namespace Tests
                 endpoint += string.Join("&", parameters);
 
                 var response = httpClient.GetAsync(endpoint).Result;
-
+                response.EnsureSuccessStatusCode();
+                LastStatusCode = response.StatusCode;
                 return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
             }
         }
@@ -95,6 +105,8 @@ namespace Tests
 
         protected HttpClient NewHttpClient()
         {
+            if (_inMemoryServer != null)
+                return new HttpClient(_inMemoryServer);
             return new HttpClient();
         }
     }

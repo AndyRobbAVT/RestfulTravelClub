@@ -96,6 +96,7 @@
     <Compile Include="Fakes\FakeTravelClubContext.cs" />
     <Compile Include="InstrumContextInitializerForTests.cs" />
     <Compile Include="IntegrationTests.cs" />
+    <Compile Include="IWebApiClient.cs" />
     <Compile Include="JsonNetFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />

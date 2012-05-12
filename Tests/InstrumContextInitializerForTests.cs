@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using Model;
-using Repository;
 
 namespace Tests
 {
-    public class TripContextInitializerForTests : DropCreateDatabaseAlways<TravelClubEntitiesContext>
+    public class TripContextInitializerForTests : DropCreateDatabaseAlways<Fakes.FakeTravelClubContext>
     {
-        protected override void Seed(TravelClubEntitiesContext context)
+        protected override void Seed(Fakes.FakeTravelClubContext context)
         {
             new List<Trip>
             {

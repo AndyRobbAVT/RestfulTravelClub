@@ -4,7 +4,7 @@ using Model;
 namespace Tests.Fakes
 {
 
-    public class FakeTravelClubContext : ITravelClubEntitiesContext
+    public class FakeTravelClubContext :DbContext, ITravelClubEntitiesContext
     {
         public FakeTravelClubContext()
         {
@@ -12,7 +12,7 @@ namespace Tests.Fakes
         }
 
         public IDbSet<Trip> Trips { get; set; }
-        public int SaveChanges()
+        public new int SaveChanges()
         {
             return 0;
         }
